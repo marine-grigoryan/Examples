@@ -1,60 +1,34 @@
 class Map {
-    constructor(data = []) {
-        this.elements = data;
+    constructor() {
+        this.elements = {};
         this.size = 0;
     }
 
+    has(key) {
+        return (key in this.elements);
+    }
+
     add(key, value) {
-        let isExist = false;
-
-        for(let i=0; i < this.elements.length; i++) {
-            if (this.elements[i][0] === key) {
-                this.elements[i][1] = value;
-                isExist = true;
-            }
-        }
-
-        if(!isExist) {
-            this.elements.push([key, value]);
-            this.size++;
-        }
+        if (!(key in this.elements)) this.size++;
+        this.elements[key] = value;
     }
 
     delete(key) {
-        for(let i=0; i < this.elements.length; i++) {
-            if (this.elements[i][0] === key) {
-                this.elements[i].splice(i, 1);
-                this.size--;
-            }
+        if (key in this.elements) {
+            delete this.elements[key];
+            this.size--;
         }
     }
 
     get(key) {
-        for(let i=0; i < this.elements.length; i++) {
-            if (Object.is(key, this.elements[i][0])) {
-                return this.elements[i][1];
-            }
-        }
-    }
-
-    keys() {
-        const keys = [];
-
-        for(let i=0; i < this.elements.length; i++) {
-            keys.push(this.elements[i][0]);
-        }
-
-        return keys;
+        return (key in this.elements) ? this.elements[key] : null;
     }
 
     values() {
-        const values = [];
-
-        for(let i=0; i < this.elements.length; i++) {
-            values.push(this.elements[i][1]);
-        }
-
-        return values;
+        return Object.keys(this.elements).reduce((data, element) => {
+            data.push(this.elements[element]);
+            return data;
+        }, []);
     }
 
     getSize() {
@@ -62,7 +36,7 @@ class Map {
     }
 
     clear() {
-        this.elements = [];
+        this.elements = {};
         this.size = 0;
     }
 }
